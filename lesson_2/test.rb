@@ -1,18 +1,16 @@
 
-def every_other(array)
-  new_array = []
-  array.each_with_index do |value, index|
-    if index.odd?
-      next
-    else
-      new_array << value
-    end
+def string_lengths(sentence)
+  strings = sentence.split
+  lengths = []
+  counter = 1
+
+  until counter == strings.size do
+    word_length = strings[counter - 1].length
+    lengths.push(word_length)
+    counter += 1
   end
-  new_array
+
+  lengths
 end
 
-p every_other([1, 2, 3, 4, 5])
-
-p every_other([2, 4, 6, 8, 10])
-
-p every_other([1, 3, 7, 4, 9, 6])
+p string_lengths("To be or not")

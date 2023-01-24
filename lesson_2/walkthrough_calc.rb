@@ -2,10 +2,6 @@
 #asks for the type of operation to perform: add, subtract, multiply or divide
 #displays the result
 
-
-
-
-
 def prompt(message)
   puts "=> #{message}"
 end
@@ -30,6 +26,7 @@ end
 prompt("WELCOME TO THE CALCULATOR!!!")
 
 name = ''
+
 loop do
   prompt("What is your name?")
   name = Kernel.gets().chomp()
@@ -43,8 +40,8 @@ prompt("Welcome, #{name}.")
 
 loop do #main loop
 
-num1 = "0"
-num2 = "0"
+  num1 = "0"
+  num2 = "0"
 
   loop do
     prompt("What is the first number?")
@@ -76,8 +73,9 @@ num2 = "0"
 
   prompt(operator_prompt)
   operation = ''
+
   loop do
-  operation = Kernel.gets().chomp()
+    operation = Kernel.gets().chomp()
     if %w(1 2 3 4).include?(operation)
       break
     else
