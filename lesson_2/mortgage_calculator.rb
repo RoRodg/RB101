@@ -3,21 +3,22 @@ def prompt(message)
 end
 
 def valid_number?(number)
-  number.to_f != 0
+  number.to_f > 0
 end
 
-puts "WELCOME TO THE MORTGAGE CALCULATOR!!!"
+puts "Welcome to the Mortgage Calculator!"
 puts "This calculator will calculate your monthly mortgage payment."
 
 loop do # MAIN LOOP
   loan_amount = 0
   loop do
     prompt("What is the total loan amount?")
+    print "$"
     loan_amount = gets.chomp.to_f
     if valid_number?(loan_amount)
       break
     else
-      puts "Please enter a valid number."
+      puts "Please enter a number greather than zero."
     end
   end
 
@@ -29,7 +30,7 @@ loop do # MAIN LOOP
     if valid_number?(loan_duration_months)
       break
     else
-      puts "Please enter a valid number."
+      puts "Please enter a number greater than zero."
     end
   end
 
@@ -42,7 +43,7 @@ loop do # MAIN LOOP
     if valid_number?(monthly_interest_decimal)
       break
     else
-      puts "Please enter a valid number."
+      puts "Please enter a number greater than zero."
     end
   end
 
@@ -65,4 +66,4 @@ loop do # MAIN LOOP
   break if answer == "n"
 end # MAIN LOOP
 
-puts "THANK YOU FOR USING MY MORTGAGE CALCULATOR!!! GOODBYE!"
+puts "Thank you for using my mortgage calculator! Goodbye!"
