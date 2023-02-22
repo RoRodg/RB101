@@ -1,17 +1,19 @@
-VALID_CHOICES = ["rock", "paper", "scissors"]
+VALID_CHOICES = %w(rock paper scissors)
 
 def prompt(message)
   puts "=> #{message}"
 end
 
-def display_results(choice, computer_choice)
-  if (choice == "rock" && computer_choice == "scissors") ||
-     (choice == "scissors" && computer_choice == "paper") ||
-     (choice == "paper" && computer_choice == "rock")
+def win?(first, second)
+  (first == "rock" && second == "scissors") ||
+    (first == "scissors" && second == "paper") ||
+    (first == "paper" && second == "rock")
+end
+
+def display_results(player, computer)
+  if win?(player, computer)
     prompt("YOU WIN!!!!!!")
-  elsif (computer_choice == "rock" && choice == "scissors") ||
-        (computer_choice == "scissors" && choice == "paper") ||
-        (computer_choice == "paper" && choice == "rock")
+  elsif win?(computer, player)
     prompt("YOU LOSE!")
   else
     prompt("TIEEEEEEEEE")
@@ -21,7 +23,7 @@ end
 loop do # MAIN LOOP
   choice = ""
   loop do
-    prompt("Choose #{VALID_CHOICES.join(", ")}.")
+    prompt("Choose #{VALID_CHOICES.join(', ')}.")
     choice = gets.chomp
     if VALID_CHOICES.include?(choice)
       break
@@ -38,6 +40,6 @@ loop do # MAIN LOOP
   display_results(choice, computer_choice)
 
   prompt("Do you want to play again? (y/n)")
-    answer = gets.chomp
-    break unless answer.downcase.start_with?("y")
+  answer = gets.chomp
+  break unless answer.downcase.start_with?("y")
 end # MAIN LOOP END
