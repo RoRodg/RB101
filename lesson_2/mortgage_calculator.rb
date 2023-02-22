@@ -6,8 +6,8 @@ def valid_number?(number)
   number.to_f > 0
 end
 
-puts "Welcome to the Mortgage Calculator!"
-puts "This calculator will calculate your monthly mortgage payment."
+prompt("Welcome to the Mortgage Calculator!")
+prompt("This calculator will calculate your monthly mortgage payment.")
 
 loop do # MAIN LOOP
   loan_amount = 0
@@ -18,7 +18,7 @@ loop do # MAIN LOOP
     if valid_number?(loan_amount)
       break
     else
-      puts "Please enter a number greather than zero."
+      prompt("Please enter a number greather than zero.")
     end
   end
 
@@ -30,7 +30,7 @@ loop do # MAIN LOOP
     if valid_number?(loan_duration_months)
       break
     else
-      puts "Please enter a number greater than zero."
+      prompt("Please enter a number greater than zero.")
     end
   end
 
@@ -43,7 +43,7 @@ loop do # MAIN LOOP
     if valid_number?(monthly_interest_decimal)
       break
     else
-      puts "Please enter a number greater than zero."
+      prompt("Please enter a number greater than zero.")
     end
   end
 
@@ -51,14 +51,14 @@ loop do # MAIN LOOP
     loan_amount * (monthly_interest_decimal /
     (1 - (1 + monthly_interest_decimal)**(-loan_duration_months)))
 
-  puts "Your monthly payment will be $#{monthly_payment.round(2)}"
+  prompt("Your monthly payment will be $#{monthly_payment.round(2)}")
 
   answer = ""
   loop do
     prompt("Do you want to calculate another loan? (y/n)")
     answer = gets.chomp.downcase
     unless answer == "y" || answer == "n"
-      puts "Please enter 'y' or 'n'"
+      prompt("Please enter 'y' or 'n'")
     else break
     end
   end
@@ -66,4 +66,4 @@ loop do # MAIN LOOP
   break if answer == "n"
 end # MAIN LOOP
 
-puts "Thank you for using my mortgage calculator! Goodbye!"
+prompt("Thank you for using my mortgage calculator! Goodbye!")
