@@ -49,7 +49,9 @@ def letter_to_word_conversion(letter)
     "scissors"
   when "l"
     "lizard"
-  when "v" || "spock"
+  when "v"
+    "Spock"
+  when "spock"
     "Spock"
   else
     letter
@@ -105,10 +107,9 @@ loop do
 
     computer_choice = %w(r p s l v).sample
 
-    prompt("You choose: #{letter_to_word_conversion(player_choice)}")
+    prompt("You chose: #{letter_to_word_conversion(player_choice)}")
 
-    prompt("The computer chooses:
-            #{letter_to_word_conversion(computer_choice)}")
+    prompt("The computer chose: #{letter_to_word_conversion(computer_choice)}")
 
     player_choice = word_to_letter_conversion(player_choice)
 
