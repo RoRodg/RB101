@@ -1,4 +1,4 @@
-VALID_CHOICES = %w(rock paper scissors lizard spock r p s l v)
+VALID_CHOICES = %w(rock paper scissors lizard spock)
 
 rules = <<-TEXT
     - Paper covers rock
@@ -21,6 +21,12 @@ rules = <<-TEXT
 def prompt(message)
   puts "=> #{message}"
 end
+
+conversion = {"r": "rock",
+              "p": "paper",
+              "s": "scissors",
+              "l": "lizard",
+              "v": "Spock" }
 
 def word_to_letter_conversion(word)
   case word
@@ -56,6 +62,10 @@ def letter_to_word_conversion(letter)
   else
     letter
   end
+end
+
+def player_input_valid?(player_choice)
+  VALID_CHOICES.include?(player_choice)
 end
 
 def win?(first, second)

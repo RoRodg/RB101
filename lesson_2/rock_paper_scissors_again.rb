@@ -1,116 +1,158 @@
-VALID_CHOICES = %w(rock paper scissors lizard spock r p s l v)
+CHOICES = ["rock", "paper", "scissors", "lizard", "Spock"]
 
-computer_score = 0
-player_score = 0
+WINNER = { "paper": ["rock", "Spock"],
+           "rock": ["lizard", "scissors"],
+           "lizard": ["Spock", "paper"],
+           "Spock": ["scissors", "rock"],
+           "scissors": ["lizard", "paper"] }
 
 rules = <<-TEXT
     - Paper covers rock
     - Rock crushes lizard
     - Lizard poisons Spock
-    - Spock smashes (or melts) scissors
+    - Spock melts scissors
     - Scissors decapitate lizard
     - Lizard eats paper
     - Paper disproves Spock
     - Spock vaporizes rock
     - Rock breaks scissors
+    - Scissors cuts paper
+
+    Each round is worth one point.
+
+    The first to 3 points wins the match.
     TEXT
+
+letter_conversion = { "r": "rock",
+                      "p": "paper",
+                      "s": "scissors",
+                      "l": "lizard",
+                      "v": "Spock" }
 
 def prompt(message)
   puts "=> #{message}"
 end
 
-def word_to_letter_conversion(word)
-  if word == "rock"
-    word = "r"
-  elsif word == "paper"
-    word = "p"
-  elsif word == "scissors"
-    word = "s"
-  elsif word == "lizard"
-    word = "l"
-  elsif word == "spock"
-    word = "v"
+def display_rules(rules)
+  loop do
+    prompt("Enter 'P' to play or 'R' to read the rules.")
+    play_or_rules = gets.chomp.downcase
+    if play_or_rules == "p"
+      break
+    elsif play_or_rules == "r"
+      puts rules
+      break
+    else
+      prompt("Invalid entry.")
+    end
+  end
+end
+
+def determine_winner(player, computer)
+  if WINNER[player.to_sym].include?(computer)
+    :player
+  elsif WINNER[computer.to_sym].include?(player)
+    :computer
   else
-    return word
+    :tie
   end
 end
 
-def letter_to_word_conversion(letter)
-  if letter == "r"
-    letter = "rock"
-  elsif letter == "p"
-    letter = "paper"
-  elsif letter == "s"
-    letter = "scissors"
-  elsif letter == "l"
-    letter = "lizard"
-  elsif letter == "v"
-    letter = "Spock"
-  elsif letter == "spock"
-    letter = "Spock"
+def convert_letter_to_word(player_choice, letter_conversion)
+  if letter_conversion[player_choice.to_sym] == nil
+    player_choice
   else
-    return letter
+    letter_conversion[player_choice.to_sym]
   end
 end
 
-def score?(first, second)
-  (first == "p" && (second == "r" || second == "sp"))  ||
-  (first == "r" && (second == "l" || second == "s")) ||
-  (first == "l" && (second == "sp" || second == "p") ||
-  (first == "sp" && (second == "s" || second == "r")) ||
-  (first == "s" && second == "l"))
-
-  # first == "l" && second == "p" ||
-  # first == "p" && second == "sp" ||
-  # first == "sp" && second == "r" ||
-  # first == "r" && second == "s"
+def player_input_valid?(player_choice)
+  CHOICES.include?(player_choice)
 end
 
-def add_point(player, computer)
-  if score?(player, computer)
-    player_score = player_score + 1
-  elsif score?(computer, player)
-    computer_score = computer_score + 1
+def update_score(winner, score)
+  score[winner] += 1 unless winner == :tie
+end
+
+def display_round_winner(winner)
+  if winner == :player
+    prompt("You win the round!!!")
+  elsif winner == :computer
+    prompt("The computer wins the round!!!")
+  else
+    prompt("Tie!")
   end
 end
 
-prompt("WELCOME TO ROCK PAPER SCISSORS LIZARD SPOCK")
+def display_round_score(score)
+  prompt("Your score is #{score[:player]}")
+  prompt("The computer's score is #{score[:computer]}")
+end
+
+def game_over?(score)
+  score[:player] == 3 || score[:computer] == 3
+end
+
+def display_game_results(score)
+  if score[:player] == 3
+    prompt("Congratulations!!! You win!!!")
+  elsif score[:computer] == 3
+    prompt("Sorry!!! You lose!!!")
+  end
+end
+
+def play_again?
+  prompt("Do you want to play again? (y/n)")
+  answer = gets.chomp
+  answer.downcase.include?("y")
+end
+
+def get_player_choice(letter_conversion)
+  player_choice = ""
+  loop do
+    prompt("Please choose: rock (r), paper (p),
+    scissors (s), lizard (l), or Spock (v)")
+    player_choice = gets.chomp
+    player_choice = convert_letter_to_word(player_choice, letter_conversion)
+    if player_input_valid?(player_choice)
+      return player_choice
+    else
+      prompt("Invalid choice.")
+    end
+  end
+end
+
+def display_choices(player_choice, computer_choice)
+  prompt("You chose: #{player_choice}")
+  prompt("The computer: chose: #{computer_choice}")
+end
 
 loop do
-  prompt("Enter P to get straight to playing or R to read the rules first.")
-  play_or_rules = gets.chomp.downcase
-  if play_or_rules == "p"
-    break
-  elsif play_or_rules == "r"
-    puts rules
-    break
-  else
-    prompt("Invalid entry.")
+  score = { player: 0, computer: 0 }
+
+  loop do
+    display_rules(rules)
+
+    player_choice = get_player_choice(letter_conversion)
+
+    computer_choice = CHOICES.sample
+
+    display_choices(player_choice, computer_choice)
+
+    winner = determine_winner(player_choice, computer_choice)
+
+    update_score(winner, score)
+
+    display_round_winner(winner)
+
+    display_round_score(score)
+
+    break if game_over?(score)
   end
+
+  display_game_results(score)
+
+  break unless play_again?()
 end
 
-player_choice = ""
-loop do
-  prompt("Choose: Rock (r), Paper (p), Scissors (s), Lizard (l), Spock (v)")
-  player_choice = gets.chomp.downcase
-  if VALID_CHOICES.include?(player_choice)
-    break
-  else
-    prompt("That is not a valid choice.")
-  end
-end
-
-computer_choice = %w(r p s l v).sample
-
-prompt("You choose: #{letter_to_word_conversion(player_choice)}")
-
-prompt("The computer chooses: #{letter_to_word_conversion(computer_choice)}")
-
-player_choice = word_to_letter_conversion(player_choice)
-
-add_point(player_choice, computer_choice)
-
-p player_score
-
-p computer_score
-
+prompt("Thank you for playing rock paper, scissor, lizard, Spock.")
